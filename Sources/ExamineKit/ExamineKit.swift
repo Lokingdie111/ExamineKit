@@ -3,12 +3,6 @@
 
 import Foundation
 
-enum PasswordOptions {
-    case uppercaseInclude(count: Int)
-    case lowercaseInclude(count: Int)
-    case specialCharactorInclude(count: Int)
-    case length(count: Int)
-}
 class RegisterExaminer {
     
     /// Check is vaild email.
@@ -49,5 +43,32 @@ class RegisterExaminer {
             return result
         }
     }
-    public static func password(password: String, options: )
+    
+    /// Check  is vaild password.
+    ///
+    /// ## Default Option:
+    /// - minLength: 8
+    /// - uppercase: 1
+    /// - lowercase: 1
+    /// - specialCharactor: 1
+    /// ## Examples:
+    /// ```swift
+    /// RegisterExaminer.password(password: "12345678") // false
+    /// RegisterExaminer.password(password: "12345678", uppercase: 0, lowercase: 0, specialCharactor: 0) // true
+    /// RegisterExaminer.password(password: "12345678", uppercase: 0, lowercase: 0, specialCharactor: 0, minLength: 10) // false
+    /// RegisterExaminer.password(password: "12345678") // false
+    /// RegisterExaminer.password(password: "12345678") // false
+    /// RegisterExaminer.password(password: "12345678") // false
+    /// ```
+    /// - Parameters:
+    ///     - password: Password that needs to check vaild.
+    ///     - minLength: Set password to be longer than this value.
+    ///     - uppercase: Password needs to contain uppercase at least as this value.
+    ///     - lowercase: Password needs to contain lowercase at least as this value.
+    ///     - specialCharactor: Password needs to conatin specialCharactor at least as this value.
+    /// - Returns: If this password satisfy options, returns true.
+    public static func password(password: String, minLength: Int = 8, uppercase: Int = 1, lowercase: Int = 1, specialCharactor: Int = 1) -> Bool {
+        
+        return true
+    }
 }

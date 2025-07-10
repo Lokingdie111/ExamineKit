@@ -8,6 +8,8 @@ struct PasswordOptions {
     var uppercase: Int = 1
     var lowercase: Int = 1
     var specialCharacter: Int = 1
+    var numberConatian: Int = 1
+    var banned: String = ""
 }
 
 struct EmailOptions {
@@ -48,7 +50,6 @@ class RegisterExaminer {
         if result == false {
             return result
         }
-        
         if let specificDomain = specificDomain {
             // Using specific domain
             return result && email.contains(specificDomain)
@@ -114,19 +115,67 @@ class RegisterExaminer {
     
     /// Core password Checker
     private static func checkPassword(password: String, option: PasswordOptions) -> Bool {
-        var result = true
+        // check banned
+        let bannedList: [String] = option.banned.components(separatedBy: " ")
+        // edit this string to change lower, upper, special charctors
+        let uppercaseList = "ABCDEFGHIJKLNMOPQRSTUVWXYZ"
+        let lowercaseList = "abcdefghijklmnopqrstuvwxyz"
+        let specialCharacters = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/\\`~"
+        let numberList = "0123456789"
+        
+        for ban in bannedList {
+            if password.contains(ban) {
+                return false
+            }
+        }
         // check minlength
         if password.count < option.minLength {
-            result = false
+            return false
+        }
+        // check numbercontain
+        var numberCount = 0
+        for char in numberList {
+            if password.contains(String(char)) {
+                numberCount += 1
+            }
+        }
+        if numberCount < option.numberConatian {
+            return false
         }
         // check uppercase
-        
+        var upperCount = 0
+        for char in uppercaseList {
+            if password.contains(String(char)) {
+                upperCount += 1
+            }
+        }
+        if upperCount < option.uppercase {
+            return false
+        }
         
         // check lowercase
+        var lowerCount = 0
+        for char in lowercaseList {
+            if password.contains(String(char)) {
+                lowerCount += 1
+            }
+        }
         
-        // check spectial
+        if lowerCount < option.lowercase {
+            return false
+        }
         
-        return result
+        // check special
+        var specCount = 0
+        for char in specialCharacters {
+            if password.contains(String(char)) {
+                specCount += 1
+            }
+        }
+        if specCount < option.specialCharacter {
+            return false
+        }
+        return true
     }
     
     init(defaultEmailOption: EmailOptions = EmailOptions(), defaultPasswordOption: PasswordOptions = PasswordOptions()) {

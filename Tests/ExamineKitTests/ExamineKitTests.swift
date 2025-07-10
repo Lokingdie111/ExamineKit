@@ -9,17 +9,23 @@ import Testing
 }
 
 @Test func testEmailExaminerWithSpecific() async throws {
-    #expect(RegisterExaminer.email(email: "exapmle@example.com", specificDomain: "example.com") == true)
-    #expect(RegisterExaminer.email(email: "foo@example.com", specificDomain: "foo.com") == false)
+    #expect(RegisterExaminer.email(email: "exapmle@example.com", emailOptions: EmailOptions(specificDomain: "example.com")) == true)
+    #expect(RegisterExaminer.email(email: "foo@example.com", emailOptions: EmailOptions(specificDomain: "foo.com")) == false)
+    #expect(RegisterExaminer.email(email: "foo@foo.co.kr", emailOptions: EmailOptions(specificDomain: "foo.co")) == false)
+    let re = RegisterExaminer(defaultEmailOption: EmailOptions(specificDomain: "foo.co.kr"))
+    #expect(re.email(email: "example@foo.co.kr") == true)
+    #expect(re.email(email: "example@foo.com") == false)
+    #expect(re.email(email: "example@foo.com", emailOptions: EmailOptions(specificDomain: "foo.com")) == true)
+    #expect(re.email(email: "example@example.com", emailOptions: EmailOptions(specificDomain: "foo.com")) == false)
 }
 
-@Test func testPasswordStatic() async throws {
-    #expect(RegisterExaminer.password(password: "12345678") == false)
-    #expect(RegisterExaminer.password(password: "Ab1$") == false)
-    #expect(RegisterExaminer.password(password: "Abbabababa!") == false)
-    #expect(RegisterExaminer.password(password: "Abbabababa!", passwordOptions: PasswordOptions(numberConatian: 0)) == true)
-}
-
-@Test func testPasswordInstance() async throws {
-    
+@Test func testPassword() async throws {
+    let r1 = RegisterExaminer.password(password: "Ab12345678!")
+    #expect(r1.isEmpty)
+    let r2 = RegisterExaminer.password(password: "")
+    #expect(r2.contains(.unsatisfyMinLength))
+    let r3 = RegisterExaminer.password(password: "Ab12345678")
+    #expect(r3.contains(.unsatisfySpecialCharacter))
+    let r4 = RegisterExaminer.password(password: "A12345678")
+    #expect(r4.contains(.unsatisfyLowercase) && r4.contains(.unsatisfySpecialCharacter))
 }

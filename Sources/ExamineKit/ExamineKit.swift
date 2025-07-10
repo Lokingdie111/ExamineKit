@@ -3,7 +3,21 @@
 
 import Foundation
 
+struct PasswordOptions {
+    var minLength: Int = 8
+    var uppercase: Int = 1
+    var lowercase: Int = 1
+    var specialCharacter: Int = 1
+}
+
+struct EmailOptions {
+    var specificDomain: String? = nil
+}
+
 class RegisterExaminer {
+    /// Store default option
+    private let passwordOption: PasswordOptions
+    private let emailOption: EmailOptions
     
     /// Check is vaild email.
     ///
@@ -52,23 +66,71 @@ class RegisterExaminer {
     /// - lowercase: 1
     /// - specialCharactor: 1
     /// ## Examples:
-    /// ```swift
-    /// RegisterExaminer.password(password: "12345678") // false
-    /// RegisterExaminer.password(password: "12345678", uppercase: 0, lowercase: 0, specialCharactor: 0) // true
-    /// RegisterExaminer.password(password: "12345678", uppercase: 0, lowercase: 0, specialCharactor: 0, minLength: 10) // false
-    /// RegisterExaminer.password(password: "12345678") // false
-    /// RegisterExaminer.password(password: "12345678") // false
-    /// RegisterExaminer.password(password: "12345678") // false
-    /// ```
     /// - Parameters:
     ///     - password: Password that needs to check vaild.
-    ///     - minLength: Set password to be longer than this value.
-    ///     - uppercase: Password needs to contain uppercase at least as this value.
-    ///     - lowercase: Password needs to contain lowercase at least as this value.
-    ///     - specialCharactor: Password needs to conatin specialCharactor at least as this value.
-    /// - Returns: If this password satisfy options, returns true.
-    public static func password(password: String, minLength: Int = 8, uppercase: Int = 1, lowercase: Int = 1, specialCharactor: Int = 1) -> Bool {
+    ///     - passwordOptions: give password options to check password vaild.
+    ///         If this parameters not given it will use Default Option.
+    ///
+    public static func password(password: String, passwordOptions: PasswordOptions? = nil) -> Bool {
+        var d: PasswordOptions
+        if let passwordOptions = passwordOptions {
+            // PasswordOptions given
+            d = passwordOptions
+        } else {
+            // PasswordOptions not given
+            d = PasswordOptions()
+        }
         
-        return true
+        return checkPassword(password: password, option: d)
+    }
+    
+    /// Check  is vaild password.
+    ///
+    /// ## Default Option:
+    /// - minLength: 8
+    /// - uppercase: 1
+    /// - lowercase: 1
+    /// - specialCharactor: 1
+    /// - If you set default password option when you create instance, follow that option.
+    /// ## Examples:
+    /// - Parameters:
+    ///     - password: Password that needs to check vaild.
+    ///     - passwordOptions: give password options to check password vaild.
+    ///         If this parameters not given it will use default Value.
+    ///
+    public func password(password: String, passwordOptions: PasswordOptions? = nil) -> Bool {
+        var d: PasswordOptions
+        if let passwordOptions = passwordOptions {
+            // PasswordOptions given
+            d = passwordOptions
+        } else {
+            // PasswordOptions not given
+            d = self.passwordOption
+        }
+        
+        // Use d for passwordOption
+        return RegisterExaminer.checkPassword(password: password, option: d)
+    }
+    
+    /// Core password Checker
+    private static func checkPassword(password: String, option: PasswordOptions) -> Bool {
+        var result = true
+        // check minlength
+        if password.count < option.minLength {
+            result = false
+        }
+        // check uppercase
+        
+        
+        // check lowercase
+        
+        // check spectial
+        
+        return result
+    }
+    
+    init(defaultEmailOption: EmailOptions = EmailOptions(), defaultPasswordOption: PasswordOptions = PasswordOptions()) {
+        self.emailOption = defaultEmailOption
+        self.passwordOption = defaultPasswordOption
     }
 }

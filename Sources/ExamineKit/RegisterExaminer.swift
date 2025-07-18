@@ -3,13 +3,15 @@
 
 import Foundation
 
-struct PasswordOptions {
+public struct PasswordOptions {
     var minLength: Int = 8
     var uppercase: Int = 1
     var lowercase: Int = 1
     var specialCharacter: Int = 1
     var number: Int = 1
     var banned: String = ""
+    
+    public init() {}
 }
 
 /// Indicates which conditions the password does not satisfy.
@@ -19,7 +21,7 @@ struct PasswordOptions {
 /// - unsatisfySpecialCharacter: Password unsatisfy rule of specialCharactor
 /// - unsatisfyNumber: Password unssatisfy rule of number
 /// - containBannedWord: Password contain bannedWord
-enum PasswordError {
+public enum PasswordError {
     case unsatisfyMinLength
     case unsatisfyLowercase
     case unsatisfyUppercase
@@ -28,11 +30,15 @@ enum PasswordError {
     case containBannedWord
 }
 
-struct EmailOptions {
+public struct EmailOptions {
     var specificDomain: String? = nil
+    
+    public init(specificDomain: String? = nil) {
+        self.specificDomain = specificDomain
+    }
 }
 
-class RegisterExaminer {
+public class RegisterExaminer {
     /// Store default option
     private let passwordOption: PasswordOptions
     private let emailOption: EmailOptions
@@ -214,7 +220,13 @@ class RegisterExaminer {
         return result
     }
     
-    init(defaultEmailOption: EmailOptions = EmailOptions(), defaultPasswordOption: PasswordOptions = PasswordOptions()) {
+    
+    
+    
+    
+    
+    
+    public init(defaultEmailOption: EmailOptions = EmailOptions(), defaultPasswordOption: PasswordOptions = PasswordOptions()) {
         self.emailOption = defaultEmailOption
         self.passwordOption = defaultPasswordOption
     }
